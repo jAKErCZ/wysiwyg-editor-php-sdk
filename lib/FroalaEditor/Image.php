@@ -7,58 +7,59 @@ use \Exception;
 
 class Image {
   public static $defaultUploadOptions = array(
-    'fieldname' => 'file',
-    'validation' => array(
-      'allowedExts' => array('gif', 'jpeg', 'jpg', 'png', 'svg', 'blob'),
-      'allowedMimeTypes' => array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png', 'image/svg+xml')
-    ),
-    'resize' => NULL
+      'fieldname' => 'file',
+      'validation' => array(
+          'allowedExts' => array('gif', 'jpeg', 'jpg', 'png', 'svg', 'blob'),
+          'allowedMimeTypes' => array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png', 'image/svg+xml')
+      ),
+      'resize' => NULL
   );
 
   /**
-  * Image upload to disk.
-  *
-  * @param fileRoute string
-  * @param options [optional]
-  *   (
-  *     fieldname => string
-  *     validation => array OR function
-  *     resize: => array
-  *   )
-  * @return {link: 'linkPath'} or error string
-  */
-  public static function upload($fileRoute, $options = NULL) {
+   * Image upload to disk.
+   *
+   * @param fileRoute string
+   * @param $basePath string
+   * @param $url string
+   * @param options [optional]
+   *   (
+   *     fieldname => string
+   *     validation => array OR function
+   *     resize: => array
+   *   )
+   * @return {link: 'linkPath'} or error string
+   */
+  public static function upload($fileRoute, $basePath, $url, $options = NULL) {
     // Check if there are any options passed.
     if (is_null($options)) {
       $options = Image::$defaultUploadOptions;
     } else {
       $options = array_merge(Image::$defaultUploadOptions, $options);
     }
-
     // Upload image.
-    return DiskManagement::upload($fileRoute, $options);
+    return DiskManagement::upload($fileRoute, $basePath, $url, $options);
   }
 
   /**
-  * Delete image from disk.
-  *
-  * @param src string
-  * @return boolean
-  */
+   * Delete image from disk.
+   *
+   * @param src string
+   * @return boolean
+   */
   public static function delete($src) {
     // Delete image.
     return DiskManagement::delete($src);
   }
 
   /**
-  * List images from disk
-  *
-  * @param folderPath string
-  *
-  * @return array of image properties
-  *     - on success : [{url: 'url', thumb: 'thumb', name: 'name'}, ...]
-  *     - on error   : {error: 'error message'}
-  */
+   * List images from disk
+   *
+   * @param folderPath string
+   *
+   * @return array of image properties
+   *     - on success : [{url: 'url', thumb: 'thumb', name: 'name'}, ...]
+   *     - on error   : {error: 'error message'}
+   */
   public static function getList($folderPath, $thumbPath = null) {
 
     if (empty($thumbPath)) {
@@ -108,4 +109,3 @@ class Image {
 }
 
 class_alias('FroalaEditor\Image', 'FroalaEditor_Image');
-?>

@@ -1,5 +1,5 @@
+.idea
 bower_components
-examples/uploads
 composer.lock
 vendor/
 **/.DS_STORE
